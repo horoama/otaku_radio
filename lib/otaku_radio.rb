@@ -2,6 +2,7 @@ require "otaku_radio/version"
 
 require "json"
 require "net/http"
+require "uri"
 
 module OtakuRadio
     class Onsen
@@ -23,6 +24,12 @@ module OtakuRadio
             json = Net::HTTP.get uri
             ret = JSON.parse(json.slice(9..json.length-4))
             return ret
+        end
+
+        def download(program , path)
+            info = self.get_program_info program
+            res = Net::HTTP.get URI.parse(info["moviePath"]["pc"])
+            File.binwrite(path, res)
         end
     end
 end
