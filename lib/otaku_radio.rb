@@ -28,8 +28,11 @@ module OtakuRadio
 
         def download(program , path)
             info = self.get_program_info program
-            res = Net::HTTP.get URI.parse(info["moviePath"]["pc"])
-            File.binwrite(path, res)
+            moviepath = info["moviePath"]["pc"]
+            unless moviepath.empty?
+                res = Net::HTTP.get URI.parse(moviepath)
+                File.binwrite(path, res)
+            end
         end
     end
 end
