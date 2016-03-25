@@ -5,11 +5,14 @@ require "net/http"
 require "uri"
 
 module OtakuRadio
+
     class Onsen
+        attr_accessor :list
         def initialize
             @base_url = 'http://www.onsen.ag/'
             @showMovie_endpoint = 'api/shownMovie/shownMovie.json'
             @getMovieInfo_endpoint = 'data/api/getMovieInfo/'
+            @list = {}
         end
 
         def program_list
@@ -35,6 +38,21 @@ module OtakuRadio
             unless moviepath.empty?
                 res = Net::HTTP.get URI.parse(moviepath)
                 File.binwrite(path, res)
+            end
+        end
+
+        def updated? program
+            if @list.empty?
+                @list = self.get_program_info program
+                return true
+            else
+                latest_list = self.get_program_info program
+                if latest_list["count"] > @list["count"]
+                    @list = latest_list
+                    return true
+                else
+                    return false
+                end
             end
         end
     end
