@@ -31,9 +31,7 @@ module OtakuRadio
 
         def download(program , path)
             info = self.get_program_info program
-            if info.include?("error")
-                return
-            end
+            return if info.include?("error")
             moviepath = info["moviePath"]["pc"]
             unless moviepath.empty?
                 res = Net::HTTP.get URI.parse(moviepath)
