@@ -40,13 +40,13 @@ module OtakuRadio
         end
 
         def updated? program
-            if @list.empty?
-                @list = self.get_program_info program
+            unless @list.include?(program)
+                @list.store(program , (self.get_program_info program))
                 return true
             else
                 latest_list = self.get_program_info program
-                if latest_list["count"] > @list["count"]
-                    @list = latest_list
+                if latest_list["count"].to_i > @list[program]["count"].to_i
+                    @list[program] = latest_list
                     return true
                 else
                     return false
