@@ -19,7 +19,7 @@ module OtakuRadio
             uri = URI.parse(@base_url + @showMovie_endpoint)
             json = Net::HTTP.get uri
             ret = JSON.parse(json)
-            return ret
+            return ret["result"]
         end
 
         def get_program_info program
